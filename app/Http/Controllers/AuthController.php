@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Location;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -14,8 +16,14 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'username'   => 'required|string',
             'password'   => 'required|string',
-            'location'   => 'required|string|exists:locations,loca_code',
+            'location'   => 'required|string',
         ]);
+
+        $locationExists = Location::where('Loca', $credentials['location'])->exists();
+
+        if (!$locationExists) {
+            return response()->json(['error' => 'Invalid location'], 401);
+        }
 
         $user = User::where('username', $credentials['username'])
                     ->where('location', $credentials['location'])

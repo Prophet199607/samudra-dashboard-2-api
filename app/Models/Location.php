@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model
 {
-    use HasFactory;
+    protected $connection = 'sqlsrv';
+    protected $table = 'Location';
+    protected $primaryKey = 'Id_No';
+    public $timestamps = false;
 
     protected $fillable = [
-        'loca_code',
-        'loca_name',
-        'status',
+        'Id_No',
+        'Loca',
+        'Loca_Descrip',
+        'Show',
+        'Loca_Type',
+        'Loca_Descrip_Short'
     ];
 
     public function users()
     {
-        return $this->hasMany(User::class, 'location', 'loca_code');
+        return $this->hasMany(User::class, 'location', 'Loca');
     }
 }

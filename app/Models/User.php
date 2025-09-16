@@ -10,13 +10,15 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
-    protected $fillable = ['username', 'password', 'location'];
+    protected $connection = 'mysql';
+    protected $table = 'users';
 
+    protected $fillable = ['username', 'password', 'location'];
     protected $hidden = ['password', 'remember_token'];
 
     public function location()
     {
-        return $this->belongsTo(Location::class, 'location', 'loca_code');
+        return $this->belongsTo(Location::class, 'location', 'Loca');
     }
 
     // JWT methods
