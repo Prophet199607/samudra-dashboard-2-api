@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DataRepositoryController;
 use App\Http\Controllers\LocationController;
 
 
@@ -25,4 +26,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('dashboard', [AuthController::class, 'dashboard']);
     Route::get('auth/user', [AuthController::class, 'authUser']);
+
+    // Data Repository
+    Route::get('customers', [DataRepositoryController::class, 'getCustomers']);
+    Route::get('customer-groups', [DataRepositoryController::class, 'getCustomerGroups']);
+    Route::get('payment-types', [DataRepositoryController::class, 'getPaymentTypes']);
 });
