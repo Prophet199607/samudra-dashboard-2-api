@@ -91,17 +91,61 @@ class CustomerOrdersController extends Controller
             $order = CustomerOrder::where('orn_number', $ornNumber)->firstOrFail();
             $currentStep = $request->input('currentStep');
 
-            // Update order with all fields (most can be null)
-            $order->update([
-                'customer_name' => $request->input('customer_name'),
-                'customer_group' => $request->input('customer_group'),
-                'customer_branch' => $request->input('customer_branch'),
-                'customer_po_no' => $request->input('customer_po_no'),
-                'po_amount' => $request->input('po_amount'),
-                'order_request_date' => $request->input('order_request_date'),
-                'remarks' => $request->input('remarks'),
+            // Prepare update data based on current step
+            $updateData = [
                 'status' => $currentStep
-            ]);
+            ];
+
+            // Add step-specific fields based on current step
+            switch ($currentStep) {
+                case 1: // Basic Order Info
+                    $updateData = array_merge($updateData, [
+                        'customer_name' => $request->input('customer_name'),
+                        'customer_group' => $request->input('customer_group'),
+                        'customer_branch' => $request->input('customer_branch'),
+                        'customer_po_no' => $request->input('customer_po_no'),
+                        'po_amount' => $request->input('po_amount'),
+                        'order_request_date' => $request->input('order_request_date'),
+                        'remarks' => $request->input('remarks'),
+                    ]);
+                    break;
+
+                case 2: // Assign Branch
+                    $updateData['sales_branch'] = $request->input('sales_branch');
+                    break;
+
+                case 3: // Approval Info
+                    $updateData = array_merge($updateData, [
+                        'approved_date' => $request->input('approved_date'),
+                        'approve_remark' => $request->input('approve_remark'),
+                        'payment_type' => $request->input('payment_type'),
+                        'approved_by' => $request->input('approved_by'),
+                    ]);
+                    break;
+
+                // Add cases for other steps as needed
+                default:
+                    // For other steps, update all fields that might be sent
+                    $updateData = array_merge($updateData, [
+                        'customer_name' => $request->input('customer_name'),
+                        'customer_group' => $request->input('customer_group'),
+                        'customer_branch' => $request->input('customer_branch'),
+                        'customer_po_no' => $request->input('customer_po_no'),
+                        'po_amount' => $request->input('po_amount'),
+                        'order_request_date' => $request->input('order_request_date'),
+                        'remarks' => $request->input('remarks'),
+                        'sales_branch' => $request->input('sales_branch'),
+                        'approved_date' => $request->input('approved_date'),
+                        'approve_remark' => $request->input('approve_remark'),
+                        'payment_type' => $request->input('payment_type'),
+                        'approved_by' => $request->input('approved_by'),
+                        // Add other fields for subsequent steps
+                    ]);
+                    break;
+            }
+
+            // Update order with the prepared data
+            $order->update($updateData);
 
             // Create new order detail record for the current step
             CustomerOrderDetails::create([
