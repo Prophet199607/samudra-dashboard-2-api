@@ -89,10 +89,6 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'options' => [
-                PDO::ATTR_STRINGIFY_FETCHES => false,
-                PDO::SQLSRV_ATTR_FETCHES_NUMERIC_TYPE => true,
-            ],
         ],
     ],
 
@@ -126,7 +122,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

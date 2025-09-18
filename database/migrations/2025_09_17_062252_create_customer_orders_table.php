@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('order_request_date');
             $table->integer('status')->default(1);
             $table->text('remarks')->nullable();
+            $table->string('sales_branch')->nullable();
         });
     }
 
