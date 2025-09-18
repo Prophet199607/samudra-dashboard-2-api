@@ -116,10 +116,9 @@ class CustomerOrdersController extends Controller
 
                 case 3: // Approval Info
                     $updateData = array_merge($updateData, [
-                        'approved_date' => $request->input('approved_date'),
-                        'approve_remark' => $request->input('approve_remark'),
                         'payment_type' => $request->input('payment_type'),
-                        'approved_by' => $request->input('approved_by'),
+                        'approval_date' => $request->input('approval_date'),
+                        'approval_remark' => $request->input('approval_remark'),
                     ]);
                     break;
 
@@ -134,11 +133,12 @@ class CustomerOrdersController extends Controller
                         'po_amount' => $request->input('po_amount'),
                         'order_request_date' => $request->input('order_request_date'),
                         'remarks' => $request->input('remarks'),
+
                         'sales_branch' => $request->input('sales_branch'),
-                        'approved_date' => $request->input('approved_date'),
-                        'approve_remark' => $request->input('approve_remark'),
+
                         'payment_type' => $request->input('payment_type'),
-                        'approved_by' => $request->input('approved_by'),
+                        'approval_date' => $request->input('approval_date'),
+                        'approval_remark' => $request->input('approval_remark'),
                         // Add other fields for subsequent steps
                     ]);
                     break;

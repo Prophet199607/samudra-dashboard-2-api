@@ -23,6 +23,9 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->text('remarks')->nullable();
             $table->string('sales_branch')->nullable();
+            $table->string('payment_type')->nullable();
+            $table->date('approval_date')->nullable();
+            $table->text('approval_remark')->nullable();
         });
     }
 
