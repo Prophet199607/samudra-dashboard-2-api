@@ -37,8 +37,8 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('orders')->group(function () {
         Route::get('generate-orn', [CustomerOrdersController::class, 'generateOrnNumber']);
         Route::get('/', [CustomerOrdersController::class, 'getAllOrderDetails']);
-        Route::get('{id}', [CustomerOrdersController::class, 'getOrder']);
+        Route::get('{ornNumber}', [CustomerOrdersController::class, 'getOrder']);
         Route::post('/new', [CustomerOrdersController::class, 'createOrder']);
-        Route::put('{id}', [CustomerOrdersController::class, 'updateOrder']);
+        Route::put('{ornNumber}', [CustomerOrdersController::class, 'updateOrder']);
     });
 });

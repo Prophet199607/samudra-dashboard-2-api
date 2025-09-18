@@ -83,12 +83,12 @@ class CustomerOrdersController extends Controller
         }
     }
 
-    public function updateOrder(Request $request, $id)
+    public function updateOrder(Request $request, $ornNumber)
     {
         try {
             DB::beginTransaction();
 
-            $order = CustomerOrder::findOrFail($id);
+            $order = CustomerOrder::where('orn_number', $ornNumber)->firstOrFail();
             $currentStep = $request->input('currentStep');
 
             // Update order with all fields (most can be null)
@@ -131,7 +131,7 @@ class CustomerOrdersController extends Controller
     public function getAllOrderDetails()
     {
         $orders = CustomerOrder::with(['order_details' => function ($query) {
-            $query->orderBy('id', 'desc');
+            $query->orderBy('orn_number', 'desc');
         }])->get();
 
         return response()->json([
@@ -140,11 +140,11 @@ class CustomerOrdersController extends Controller
         ], 200);
     }
 
-    public function getOrder($id)
+    public function getOrder($ornNumber)
     {
         $order = CustomerOrder::with(['order_details' => function ($query) {
-            $query->orderBy('id', 'desc');
-        }])->findOrFail($id);
+            $query->orderBy('orn_number', 'desc');
+        }])->where('orn_number', $ornNumber)->firstOrFail();
 
         return response()->json([
             'order' => $order,
