@@ -30,6 +30,14 @@ return new class extends Migration
             $table->string('quotation_no')->nullable();
             $table->date('quotation_date')->nullable();
             $table->string('payment_receipt', 255)->nullable();
+            $table->string('invoice_no')->nullable();
+            $table->decimal('invoice_amount', 12, 2)->nullable();
+            $table->string('vehicle_no')->nullable();
+            $table->string('driver_name')->nullable();
+            $table->string('no_of_boxes')->nullable();
+            $table->decimal('cash_in_number', 12, 2)->nullable();
+            $table->string('way_bill_no')->nullable();
+            $table->string('handover_to')->nullable();
             $table->integer('status')->default(1);
         });
     }
