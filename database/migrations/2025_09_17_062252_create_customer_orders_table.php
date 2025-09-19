@@ -29,6 +29,7 @@ return new class extends Migration
             $table->date('sales_order_date')->nullable();
             $table->string('quotation_no')->nullable();
             $table->date('quotation_date')->nullable();
+            $table->string('payment_receipt', 255)->nullable();
             $table->integer('status')->default(1);
         });
     }

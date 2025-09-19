@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomerOrder;
-use App\Models\CustomerOrderDetails;
 use Illuminate\Http\Request;
+use App\Models\CustomerOrder;
 use Illuminate\Support\Facades\DB;
+use App\Models\CustomerOrderDetails;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerOrdersController extends Controller
@@ -91,6 +92,33 @@ class CustomerOrdersController extends Controller
             $order = CustomerOrder::where('orn_number', $ornNumber)->firstOrFail();
             $currentStep = $request->input('currentStep');
 
+            // Handle file upload for step 6 (Payment)
+            $paymentReceiptPath = null;
+            if ($currentStep == 6 && $request->hasFile('payment_receipt')) {
+                // Validate file
+                $validator = Validator::make($request->all(), [
+                    'payment_receipt' => 'required|file|mimes:jpeg,jpg,png,pdf|max:2048'
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'message' => 'File validation failed: ' . implode(', ', $validator->errors()->all()),
+                        'success' => false
+                    ], 422);
+                }
+
+                $file = $request->file('payment_receipt');
+                $fileName = time() . '_' . $ornNumber . '.' . $file->getClientOriginalExtension();
+
+                // Store file in public/payments directory
+                $paymentReceiptPath = $file->storeAs('payments', $fileName, 'public');
+
+                // Delete old file if exists
+                if ($order->payment_receipt) {
+                    Storage::disk('public')->delete($order->payment_receipt);
+                }
+            }
+
             // Prepare update data based on current step
             $updateData = [
                 'status' => $currentStep
@@ -121,17 +149,25 @@ class CustomerOrdersController extends Controller
                         'approval_remark' => $request->input('approval_remark'),
                     ]);
                     break;
+
                 case 4: // Sales Order Info
                     $updateData = array_merge($updateData, [
                         'sales_order_no' => $request->input('sales_order_no'),
                         'sales_order_date' => $request->input('sales_order_date'),
                     ]);
                     break;
+
                 case 5: // Quotation Info
                     $updateData = array_merge($updateData, [
                         'quotation_no' => $request->input('quotation_no'),
                         'quotation_date' => $request->input('quotation_date'),
                     ]);
+                    break;
+
+                case 6: // Payment Info
+                    if ($paymentReceiptPath) {
+                        $updateData['payment_receipt'] = $paymentReceiptPath;
+                    }
                     break;
 
                 // Add cases for other steps as needed
@@ -158,6 +194,11 @@ class CustomerOrdersController extends Controller
                         'quotation_no' => $request->input('quotation_no'),
                         'quotation_date' => $request->input('quotation_date'),
                     ]);
+
+                    // Add payment receipt if uploaded
+                    if ($paymentReceiptPath) {
+                        $updateData['payment_receipt'] = $paymentReceiptPath;
+                    }
                     break;
             }
 
