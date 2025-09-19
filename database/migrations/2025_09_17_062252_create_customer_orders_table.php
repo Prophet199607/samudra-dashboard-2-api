@@ -20,12 +20,16 @@ return new class extends Migration
             $table->decimal('po_amount', 12, 2);
             $table->string('orn_number')->unique();
             $table->date('order_request_date');
-            $table->integer('status')->default(1);
             $table->text('remarks')->nullable();
             $table->string('sales_branch')->nullable();
             $table->string('payment_type')->nullable();
             $table->date('approval_date')->nullable();
             $table->text('approval_remark')->nullable();
+            $table->string('sales_order_no')->nullable();
+            $table->date('sales_order_date')->nullable();
+            $table->string('quotation_no')->nullable();
+            $table->date('quotation_date')->nullable();
+            $table->integer('status')->default(1);
         });
     }
 

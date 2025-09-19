@@ -121,6 +121,18 @@ class CustomerOrdersController extends Controller
                         'approval_remark' => $request->input('approval_remark'),
                     ]);
                     break;
+                case 4: // Sales Order Info
+                    $updateData = array_merge($updateData, [
+                        'sales_order_no' => $request->input('sales_order_no'),
+                        'sales_order_date' => $request->input('sales_order_date'),
+                    ]);
+                    break;
+                case 5: // Quotation Info
+                    $updateData = array_merge($updateData, [
+                        'quotation_no' => $request->input('quotation_no'),
+                        'quotation_date' => $request->input('quotation_date'),
+                    ]);
+                    break;
 
                 // Add cases for other steps as needed
                 default:
@@ -139,7 +151,12 @@ class CustomerOrdersController extends Controller
                         'payment_type' => $request->input('payment_type'),
                         'approval_date' => $request->input('approval_date'),
                         'approval_remark' => $request->input('approval_remark'),
-                        // Add other fields for subsequent steps
+
+                        'sales_order_no' => $request->input('sales_order_no'),
+                        'sales_order_date' => $request->input('sales_order_date'),
+
+                        'quotation_no' => $request->input('quotation_no'),
+                        'quotation_date' => $request->input('quotation_date'),
                     ]);
                     break;
             }
