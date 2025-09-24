@@ -48,15 +48,15 @@ class CustomerOrdersController extends Controller
             ]);
 
             $order = CustomerOrder::create([
-                'customer_name' => $validated['customer_name'],
-                'customer_group' => $validated['customer_group'],
-                'customer_branch' => $validated['customer_branch'],
-                'customer_po_no' => $validated['customer_po_no'],
-                'po_amount' => $validated['po_amount'],
+                'customer_name' => $validated['customer_name'] ?? null,
+                'customer_group' => $validated['customer_group'] ?? null,
+                'customer_branch' => $validated['customer_branch'] ?? null,
+                'customer_po_no' => $validated['customer_po_no'] ?? null,
+                'po_amount' => $validated['po_amount'] ?? null,
                 'orn_number' => $validated['orn_number'],
-                'order_request_date' => $validated['order_request_date'],
+                'order_request_date' => $validated['order_request_date'] ?? null,
                 'remarks' => $validated['remarks'] ?? null,
-                'status' => $validated['status'],
+                'status' => $validated['status'] ?? 1,
             ]);
 
             // Create initial order detail for the first step only
