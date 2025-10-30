@@ -89,9 +89,12 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            // 'odbc_driver' => 'ODBC Driver 17 for SQL Server',
+            // 'encrypt' => env('SECOND_DB_ENCRYPT', 'no'),
+            // 'trust_server_certificate' => env('SECOND_DB_TRUST_SERVER_CERTIFICATE', true),
             'odbc_driver' => 'ODBC Driver 17 for SQL Server',
-            'encrypt' => env('SECOND_DB_ENCRYPT', 'no'),
-            'trust_server_certificate' => env('SECOND_DB_TRUST_SERVER_CERTIFICATE', true),
+            'Encrypt' => 'no',   // <-- MUST be 'no' as string
+            'TrustServerCertificate' => true,
         ],
     ],
 
