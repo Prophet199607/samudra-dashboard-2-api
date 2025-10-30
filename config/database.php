@@ -81,7 +81,7 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('SECOND_DATABASE_URL'),
-            'host' => env('SECOND_DB_HOST', '26.135.211.121'),
+            'host' => env('SECOND_DB_HOST', '220.247.245.129'),
             'port' => env('SECOND_DB_PORT', '1433'),
             'database' => env('SECOND_DB_DATABASE', 'NewInv_Test'),
             'username' => env('SECOND_DB_USERNAME', 'sa'),
@@ -89,6 +89,8 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'encrypt' => env('SECOND_DB_ENCRYPT', 'no'),
+            'trust_server_certificate' => env('SECOND_DB_TRUST_SERVER_CERTIFICATE', true),
         ],
     ],
 
