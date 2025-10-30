@@ -89,7 +89,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'encrypt' => env('SECOND_DB_ENCRYPT', 'no'),
+            'encrypt' => env('SECOND_DB_ENCRYPT', 'optional'),
             'trust_server_certificate' => env('SECOND_DB_TRUST_SERVER_CERTIFICATE', true),
         ],
     ],
