@@ -77,19 +77,6 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'url' => env('SECOND_DATABASE_URL'),
-            'host' => env('SECOND_DB_HOST', '26.135.211.121'),
-            'port' => env('SECOND_DB_PORT', '1433'),
-            'database' => env('SECOND_DB_DATABASE', 'NewInv_Test'),
-            'username' => env('SECOND_DB_USERNAME', 'sa'),
-            'password' => env('SECOND_DB_PASSWORD', 'itonimta'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
     ],
 
     /*
