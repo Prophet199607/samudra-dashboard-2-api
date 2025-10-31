@@ -16,11 +16,6 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = ['username', 'password', 'location'];
     protected $hidden = ['password', 'remember_token'];
 
-    public function location()
-    {
-        return $this->belongsTo(Location::class, 'location', 'Loca');
-    }
-
     // JWT methods
     public function getJWTIdentifier()
     {
