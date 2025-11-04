@@ -18,13 +18,13 @@ class AuthController extends Controller
             'location'   => 'required|string',
         ]);
 
-        try {
-            if (!$this->isLocationValid($credentials['location'])) {
-                return response()->json(['error' => 'Invalid location selected'], 401);
-            }
-        } catch (\Exception) {
-            return response()->json(['error' => 'Could not verify location. Please try again later.'], 500);
-        }
+        // try {
+        //     if (!$this->isLocationValid($credentials['location'])) {
+        //         return response()->json(['error' => 'Invalid location selected'], 401);
+        //     }
+        // } catch (\Exception) {
+        //     return response()->json(['error' => 'Could not verify location. Please try again later.'], 500);
+        // }
 
         $user = User::where('username', $credentials['username'])->first();
 
