@@ -19,11 +19,6 @@ use App\Http\Controllers\DataRepositoryController;
 |
 */
 
-// Test endpoint for CORS
-Route::get('test-cors', function () {
-    return response()->json(['message' => 'CORS is working']);
-});
-
 Route::post('login', [AuthController::class, 'login']);
 
 // Proxy for external locations API

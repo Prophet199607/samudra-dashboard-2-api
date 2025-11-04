@@ -14,8 +14,8 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        // For API applications, we should never redirect unauthenticated requests
-        // Always return null to prevent CORS preflight issues and return proper 401 JSON responses
-        return null;
+        if (! $request->expectsJson()) {
+            return route('login');
+        }
     }
 }
