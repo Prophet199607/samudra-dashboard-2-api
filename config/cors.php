@@ -22,6 +22,8 @@ return [
     'allowed_origins' => [
         'http://samudradist.onimtaitsl.com',
         'https://samudradist.onimtaitsl.com',
+        'http://samudradistapi.onimtaitsl.com',
+        'https://samudradistapi.onimtaitsl.com',
         'http://localhost:3000',
         'http://localhost:8080',
     ],

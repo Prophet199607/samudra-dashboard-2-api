@@ -19,6 +19,14 @@ use App\Http\Controllers\DataRepositoryController;
 |
 */
 
+// Handle preflight OPTIONS requests explicitly
+Route::options('{any}', function () {
+    return response('', 200)
+        ->header('Access-Control-Allow-Origin', '*')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+})->where('any', '.*');
+
 Route::post('login', [AuthController::class, 'login']);
 
 // Proxy for external locations API
