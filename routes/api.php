@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CustomerOrdersController;
 use App\Http\Controllers\DataRepositoryController;
 
@@ -21,7 +20,9 @@ use App\Http\Controllers\DataRepositoryController;
 */
 
 Route::post('login', [AuthController::class, 'login']);
-Route::get('locations', [LocationController::class, 'index']);
+
+// Proxy for external locations API
+Route::get('locations', [DataRepositoryController::class, 'getLocations']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);

@@ -77,25 +77,6 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
-        'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'url' => env('SECOND_DATABASE_URL'),
-            'host' => env('SECOND_DB_HOST', '220.247.245.129'),
-            'port' => env('SECOND_DB_PORT', '1433'),
-            'database' => env('SECOND_DB_DATABASE', 'NewInv_Test'),
-            'username' => env('SECOND_DB_USERNAME', 'sa'),
-            'password' => env('SECOND_DB_PASSWORD', 'itonimta'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            // 'odbc_driver' => 'ODBC Driver 17 for SQL Server',
-            // 'encrypt' => env('SECOND_DB_ENCRYPT', 'no'),
-            // 'trust_server_certificate' => env('SECOND_DB_TRUST_SERVER_CERTIFICATE', true),
-            'odbc_driver' => 'ODBC Driver 17 for SQL Server',
-            'Encrypt' => 'no',   // <-- MUST be 'no' as string
-            'TrustServerCertificate' => true,
-        ],
     ],
 
     /*
