@@ -16,8 +16,8 @@ class Kernel extends HttpKernel
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
-        // The Laravel 10 built-in CORS middleware replaces the old Fruitcake package
-        \Illuminate\Http\Middleware\HandleCors::class,
+        // Use our custom CORS middleware instead of Laravel's built-in one
+        \App\Http\Middleware\HandleCorsRequests::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
