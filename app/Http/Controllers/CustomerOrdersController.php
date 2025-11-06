@@ -287,4 +287,17 @@ class CustomerOrdersController extends Controller
             'success' => true
         ], 200);
     }
+
+    public function getDashboardStats()
+    {
+        $completedOrders = CustomerOrder::where('status', 9)->count();
+        $totalOrders = CustomerOrder::count();
+        $pendingOrders = $totalOrders - $completedOrders;
+
+        return response()->json([
+            'totalOrders' => $totalOrders,
+            'pendingOrders' => $pendingOrders,
+            'completedOrders' => $completedOrders,
+        ]);
+    }
 }
