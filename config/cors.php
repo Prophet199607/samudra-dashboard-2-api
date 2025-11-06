@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        'https://samudradist.onimtaitsl.com',
+        'http://samudradist.onimtaitsl.com',
+    ],
 
     'allowed_origins_patterns' => [],
 
