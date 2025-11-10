@@ -30,6 +30,20 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'username' => 'Keshara',
+                'password' => Hash::make('keshara'),
+                'location' => '02',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'username' => 'Nirmal',
+                'password' => Hash::make('nirmal'),
+                'location' => '02',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
