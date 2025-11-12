@@ -34,12 +34,14 @@ return new class extends Migration
             $table->boolean('payment_confirmed')->default(0);
             $table->string('invoice_no')->nullable();
             $table->decimal('invoice_amount', 12, 2)->nullable();
+            $table->string('delivery_type');
+            $table->string('bus_no')->nullable();
+            $table->string('way_bill_no')->nullable();
+            $table->string('tracking_no')->nullable();
             $table->string('vehicle_no')->nullable();
             $table->string('driver_name')->nullable();
+            $table->string('courier_name')->nullable();
             $table->string('no_of_boxes')->nullable();
-            $table->decimal('cash_in_number', 12, 2)->nullable();
-            $table->string('way_bill_no')->nullable();
-            $table->string('handover_to')->nullable();
             $table->integer('status')->default(1);
         });
     }
