@@ -108,7 +108,7 @@ class CustomerOrdersController extends Controller
                 }
 
                 $file = $request->file('payment_receipt');
-                $fileName = time() . '_' . $ornNumber . '.' . $file->getClientOriginalExtension();
+                $fileName = 'DS' . '-' . time() . '-' . $ornNumber . '.' . $file->getClientOriginalExtension();
 
                 // Store file in public/payments directory
                 $paymentReceiptPath = $file->storeAs('payments', $fileName, 'public');
