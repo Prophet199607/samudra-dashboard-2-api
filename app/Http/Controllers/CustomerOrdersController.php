@@ -165,11 +165,10 @@ class CustomerOrdersController extends Controller
                     ]);
                     break;
 
-                case 8: // Delivery Info
+                case 8: // Invoice Info
                     $updateData = array_merge($updateData, [
-                        'vehicle_no' => $request->input('vehicle_no'),
-                        'driver_name' => $request->input('driver_name'),
-                        'no_of_boxes' => $request->input('no_of_boxes'),
+                        'invoice_no' => $request->input('invoice_no'),
+                        'invoice_amount' => $request->input('invoice_amount'),
                     ]);
                     break;
 
@@ -178,6 +177,9 @@ class CustomerOrdersController extends Controller
                         'cash_in_number' => $request->input('cash_in_number'),
                         'way_bill_no' => $request->input('way_bill_no'),
                         'handover_to' => $request->input('handover_to'),
+                        'vehicle_no' => $request->input('vehicle_no'),
+                        'driver_name' => $request->input('driver_name'),
+                        'no_of_boxes' => $request->input('no_of_boxes'),
                     ]);
                     break;
 
@@ -206,7 +208,6 @@ class CustomerOrdersController extends Controller
                         'vehicle_no' => $request->input('vehicle_no'),
                         'driver_name' => $request->input('driver_name'),
                         'no_of_boxes' => $request->input('no_of_boxes'),
-
                         'cash_in_number' => $request->input('cash_in_number'),
                         'way_bill_no' => $request->input('way_bill_no'),
                         'handover_to' => $request->input('handover_to'),
