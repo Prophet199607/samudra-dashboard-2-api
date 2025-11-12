@@ -172,20 +172,19 @@ class CustomerOrdersController extends Controller
                     ]);
                     break;
 
-                case 9: // Complete Order
+                case 9: // Delivery Info
                     $updateData = array_merge($updateData, [
-                        'cash_in_number' => $request->input('cash_in_number'),
+                        'delivery_type' => $request->input('delivery_type'),
+                        'bus_no' => $request->input('bus_no'),
                         'way_bill_no' => $request->input('way_bill_no'),
-                        'handover_to' => $request->input('handover_to'),
+                        'tracking_no' => $request->input('tracking_no'),
                         'vehicle_no' => $request->input('vehicle_no'),
                         'driver_name' => $request->input('driver_name'),
+                        'courier_name' => $request->input('courier_name'),
                         'no_of_boxes' => $request->input('no_of_boxes'),
                     ]);
                     break;
-
-                // Add cases for other steps as needed
                 default:
-                    // For other steps, update all fields that might be sent
                     $updateData = array_merge($updateData, [
                         'sales_branch' => $request->input('sales_branch'),
 
@@ -205,12 +204,14 @@ class CustomerOrdersController extends Controller
                         'invoice_no' => $request->input('invoice_no'),
                         'invoice_amount' => $request->input('invoice_amount'),
 
+                        'delivery_type' => $request->input('delivery_type'),
+                        'bus_no' => $request->input('bus_no'),
+                        'way_bill_no' => $request->input('way_bill_no'),
+                        'tracking_no' => $request->input('tracking_no'),
                         'vehicle_no' => $request->input('vehicle_no'),
                         'driver_name' => $request->input('driver_name'),
+                        'courier_name' => $request->input('courier_name'),
                         'no_of_boxes' => $request->input('no_of_boxes'),
-                        'cash_in_number' => $request->input('cash_in_number'),
-                        'way_bill_no' => $request->input('way_bill_no'),
-                        'handover_to' => $request->input('handover_to'),
                     ]);
 
                     // Add payment receipt if uploaded
