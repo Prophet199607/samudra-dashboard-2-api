@@ -158,10 +158,10 @@ class CustomerOrdersController extends Controller
                     }
                     break;
 
-                case 7: // Invoice Info
+                case 7: // Payment Confirm
                     $updateData = array_merge($updateData, [
-                        'invoice_no' => $request->input('invoice_no'),
-                        'invoice_amount' => $request->input('invoice_amount'),
+                        'payment_confirmed' => $request->input('payment_confirmed'),
+                        'payment_remark' => $request->input('payment_remark'),
                     ]);
                     break;
 
@@ -196,6 +196,9 @@ class CustomerOrdersController extends Controller
 
                         'quotation_no' => $request->input('quotation_no'),
                         'quotation_date' => $request->input('quotation_date'),
+
+                        'payment_confirmed' => $request->input('payment_confirmed'),
+                        'payment_remark' => $request->input('payment_remark'),
 
                         'invoice_no' => $request->input('invoice_no'),
                         'invoice_amount' => $request->input('invoice_amount'),
