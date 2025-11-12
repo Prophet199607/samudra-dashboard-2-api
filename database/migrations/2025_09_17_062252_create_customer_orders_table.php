@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('po_amount', 12, 2);
             $table->string('orn_number')->unique();
             $table->date('order_request_date');
-            $table->text('remarks')->nullable();
+            $table->text('remark')->nullable();
             $table->string('sales_branch')->nullable();
             $table->string('payment_type')->nullable();
             $table->date('approval_date')->nullable();
@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('quotation_no')->nullable();
             $table->date('quotation_date')->nullable();
             $table->string('payment_receipt', 255)->nullable();
+            $table->text('payment_remark')->nullable();
+            $table->boolean('payment_confirmed')->default(0);
             $table->string('invoice_no')->nullable();
             $table->decimal('invoice_amount', 12, 2)->nullable();
             $table->string('vehicle_no')->nullable();
