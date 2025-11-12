@@ -43,7 +43,7 @@ class CustomerOrdersController extends Controller
                 'po_amount' => 'nullable|numeric',
                 'orn_number' => 'required|string|unique:customer_orders',
                 'order_request_date' => 'nullable|date',
-                'remarks' => 'nullable|string',
+                'remark' => 'nullable|string',
                 'status' => 'nullable|integer'
             ]);
 
@@ -55,7 +55,7 @@ class CustomerOrdersController extends Controller
                 'po_amount' => $validated['po_amount'] ?? null,
                 'orn_number' => $validated['orn_number'],
                 'order_request_date' => $validated['order_request_date'] ?? null,
-                'remarks' => $validated['remarks'] ?? null,
+                'remark' => $validated['remark'] ?? null,
                 'status' => $validated['status'] ?? 1,
             ]);
 
@@ -126,18 +126,6 @@ class CustomerOrdersController extends Controller
 
             // Add step-specific fields based on current step
             switch ($currentStep) {
-                case 1: // Basic Order Info
-                    $updateData = array_merge($updateData, [
-                        'customer_name' => $request->input('customer_name'),
-                        'customer_group' => $request->input('customer_group'),
-                        'customer_branch' => $request->input('customer_branch'),
-                        'customer_po_no' => $request->input('customer_po_no'),
-                        'po_amount' => $request->input('po_amount'),
-                        'order_request_date' => $request->input('order_request_date'),
-                        'remarks' => $request->input('remarks'),
-                    ]);
-                    break;
-
                 case 2: // Assign Branch
                     $updateData['sales_branch'] = $request->input('sales_branch');
                     break;
@@ -197,14 +185,6 @@ class CustomerOrdersController extends Controller
                 default:
                     // For other steps, update all fields that might be sent
                     $updateData = array_merge($updateData, [
-                        'customer_name' => $request->input('customer_name'),
-                        'customer_group' => $request->input('customer_group'),
-                        'customer_branch' => $request->input('customer_branch'),
-                        'customer_po_no' => $request->input('customer_po_no'),
-                        'po_amount' => $request->input('po_amount'),
-                        'order_request_date' => $request->input('order_request_date'),
-                        'remarks' => $request->input('remarks'),
-
                         'sales_branch' => $request->input('sales_branch'),
 
                         'payment_type' => $request->input('payment_type'),
