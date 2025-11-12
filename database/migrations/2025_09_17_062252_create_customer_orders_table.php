@@ -34,7 +34,7 @@ return new class extends Migration
             $table->boolean('payment_confirmed')->default(0);
             $table->string('invoice_no')->nullable();
             $table->decimal('invoice_amount', 12, 2)->nullable();
-            $table->string('delivery_type');
+            $table->string('delivery_type')->nullable();
             $table->string('bus_no')->nullable();
             $table->string('way_bill_no')->nullable();
             $table->string('tracking_no')->nullable();
