@@ -18,4 +18,9 @@ class CustomerOrderDetails extends Model
     {
         return $this->belongsTo(CustomerOrder::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'changed_by');
+    }
 }

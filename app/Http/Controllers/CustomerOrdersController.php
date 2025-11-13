@@ -292,7 +292,7 @@ class CustomerOrdersController extends Controller
     public function getAllOrderDetails()
     {
         $orders = CustomerOrder::with(['order_details' => function ($query) {
-            $query->orderBy('orn_number', 'desc');
+            $query->with('user')->orderBy('orn_number', 'desc');
         }])->get();
 
         return response()->json([
@@ -304,7 +304,7 @@ class CustomerOrdersController extends Controller
     public function getOrder($ornNumber)
     {
         $order = CustomerOrder::with(['order_details' => function ($query) {
-            $query->orderBy('orn_number', 'desc');
+            $query->with('user')->orderBy('orn_number', 'desc');
         }])->where('orn_number', $ornNumber)->firstOrFail();
 
         return response()->json([
