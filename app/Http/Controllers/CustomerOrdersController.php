@@ -183,6 +183,11 @@ class CustomerOrdersController extends Controller
                         'courier_name' => $request->input('courier_name'),
                         'no_of_boxes' => $request->input('no_of_boxes'),
                     ]);
+
+                    if (isset($order->is_delayed) && $order->is_delayed == 1) {
+                        $updateData['is_delayed'] = 0;
+                    }
+
                     break;
                 default:
                     $updateData = array_merge($updateData, [
@@ -205,6 +210,8 @@ class CustomerOrdersController extends Controller
                         'invoice_amount' => $request->input('invoice_amount'),
 
                         'delivery_type' => $request->input('delivery_type'),
+                        'is_delayed' => $request->input('is_delayed'),
+                        'delay_reason' => $request->input('delay_reason'),
                         'bus_no' => $request->input('bus_no'),
                         'way_bill_no' => $request->input('way_bill_no'),
                         'tracking_no' => $request->input('tracking_no'),
@@ -244,6 +251,39 @@ class CustomerOrdersController extends Controller
             DB::rollback();
             return response()->json([
                 'message' => 'Failed to update order: ' . $e->getMessage(),
+                'success' => false
+            ], 500);
+        }
+    }
+
+    public function updateDelay(Request $request, $ornNumber)
+    {
+        try {
+            $validated = $request->validate([
+                'delay_reason' => 'required|string|max:255',
+            ]);
+
+            $order = CustomerOrder::where('orn_number', $ornNumber)->firstOrFail();
+
+            $order->update([
+                'is_delayed' => 1,
+                'delay_reason' => $validated['delay_reason'],
+            ]);
+
+            return response()->json([
+                'message' => 'Order delay status updated successfully',
+                'order' => $order->fresh(),
+                'success' => true
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed: ' . $e->getMessage(),
+                'errors' => $e->errors(),
+                'success' => false
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to update order delay status: ' . $e->getMessage(),
                 'success' => false
             ], 500);
         }

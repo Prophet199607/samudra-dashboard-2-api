@@ -42,5 +42,6 @@ Route::middleware('auth:api')->group(function () {
         Route::get('{ornNumber}', [CustomerOrdersController::class, 'getOrder']);
         Route::post('/new', [CustomerOrdersController::class, 'createOrder']);
         Route::put('{ornNumber}', [CustomerOrdersController::class, 'updateOrder']);
+        Route::put('{ornNumber}/delay', [CustomerOrdersController::class, 'updateDelay']);
     });
 });
