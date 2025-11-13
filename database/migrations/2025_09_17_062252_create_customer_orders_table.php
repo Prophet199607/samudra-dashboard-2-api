@@ -36,6 +36,7 @@ return new class extends Migration
             $table->decimal('invoice_amount', 12, 2)->nullable();
             $table->string('delivery_type')->nullable();
             $table->boolean('delivery_status')->default(0);
+            $table->text('delay_reason')->nullable();
             $table->string('bus_no')->nullable();
             $table->string('way_bill_no')->nullable();
             $table->string('tracking_no')->nullable();
