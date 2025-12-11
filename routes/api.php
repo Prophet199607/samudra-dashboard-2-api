@@ -21,9 +21,6 @@ use App\Http\Controllers\DataRepositoryController;
 
 Route::post('login', [AuthController::class, 'login']);
 
-// Proxy for external locations API
-Route::get('locations', [DataRepositoryController::class, 'getLocations']);
-
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('dashboard', [AuthController::class, 'dashboard']);
