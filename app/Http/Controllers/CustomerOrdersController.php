@@ -139,20 +139,6 @@ class CustomerOrdersController extends Controller
                     ]);
                     break;
 
-                case 4: // Sales Order Info
-                    $updateData = array_merge($updateData, [
-                        'sales_order_no' => $request->input('sales_order_no'),
-                        'sales_order_date' => $request->input('sales_order_date'),
-                    ]);
-                    break;
-
-                case 5: // Quotation Info
-                    $updateData = array_merge($updateData, [
-                        'quotation_no' => $request->input('quotation_no'),
-                        'quotation_date' => $request->input('quotation_date'),
-                    ]);
-                    break;
-
                 case 6: // Payment Info
                     if ($paymentReceiptPath) {
                         $updateData['payment_receipt'] = $paymentReceiptPath;
@@ -198,12 +184,6 @@ class CustomerOrdersController extends Controller
                         'payment_type' => $request->input('payment_type'),
                         'approval_date' => $request->input('approval_date'),
                         'approval_remark' => $request->input('approval_remark'),
-
-                        'sales_order_no' => $request->input('sales_order_no'),
-                        'sales_order_date' => $request->input('sales_order_date'),
-
-                        'quotation_no' => $request->input('quotation_no'),
-                        'quotation_date' => $request->input('quotation_date'),
 
                         'payment_confirmed' => $request->input('payment_confirmed'),
                         'payment_remark' => $request->input('payment_remark'),
