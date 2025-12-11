@@ -128,6 +128,7 @@ class CustomerOrdersController extends Controller
             switch ($currentStep) {
                 case 2: // Assign Branch
                     $updateData['sales_branch'] = $request->input('sales_branch');
+                    $updateData['sales_branch_code'] = $request->input('sales_branch_code');
                     break;
 
                 case 3: // Approval Info
