@@ -27,8 +27,10 @@ return new class extends Migration
             $table->date('approval_date')->nullable();
             $table->text('approval_remark')->nullable();
             $table->string('sales_order_no')->nullable();
+            $table->decimal('sales_order_amount', 12, 2)->nullable();
             $table->date('sales_order_date')->nullable();
             $table->string('quotation_no')->nullable();
+            $table->decimal('quotation_amount', 12, 2)->nullable();
             $table->date('quotation_date')->nullable();
             $table->string('payment_receipt', 255)->nullable();
             $table->text('payment_remark')->nullable();
