@@ -193,6 +193,7 @@ class CustomerOrdersController extends Controller
                 default:
                     $updateData = array_merge($updateData, [
                         'sales_branch' => $request->input('sales_branch'),
+                        'sales_branch_code' => $request->input('sales_branch_code'),
 
                         'payment_type' => $request->input('payment_type'),
                         'approval_date' => $request->input('approval_date'),
@@ -325,5 +326,25 @@ class CustomerOrdersController extends Controller
             'pendingOrders' => $pendingOrders,
             'completedOrders' => $completedOrders,
         ]);
+    }
+
+
+    public function getApprovedOrders(Request $request)
+    {
+        $query = CustomerOrder::where('status', 3);
+
+        if ($request->has('location')) {
+            $location = $request->input('location');
+            if (!empty($location)) {
+                $query->where('sales_branch_code', $location);
+            }
+        }
+
+        $orders = $query->get();
+
+        return response()->json([
+            'orders' => $orders,
+            'success' => true
+        ], 200);
     }
 }

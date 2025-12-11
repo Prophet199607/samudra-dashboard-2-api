@@ -42,3 +42,8 @@ Route::middleware('auth:api')->group(function () {
         Route::put('{ornNumber}/delay', [CustomerOrdersController::class, 'updateDelay']);
     });
 });
+
+// Transactions
+Route::prefix('transactions')->group(function () {
+    Route::post('approved-orders', [CustomerOrdersController::class, 'getApprovedOrders']);
+});
