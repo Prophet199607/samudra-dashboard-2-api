@@ -46,4 +46,6 @@ Route::middleware('auth:api')->group(function () {
 // Transactions
 Route::prefix('transactions')->group(function () {
     Route::post('approved-orders', [CustomerOrdersController::class, 'getApprovedOrders']);
+    Route::post('update-sales-order', [CustomerOrdersController::class, 'updateSalesOrder']);
+    Route::post('update-quotation', [CustomerOrdersController::class, 'updateQuotation']);
 });

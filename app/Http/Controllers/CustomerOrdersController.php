@@ -347,4 +347,94 @@ class CustomerOrdersController extends Controller
             'success' => true
         ], 200);
     }
+    
+    public function updateSalesOrder(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $validated = $request->validate([
+                'orn_number' => 'required|string|exists:customer_orders,orn_number',
+                'sales_order_no' => 'required|string',
+                'sales_order_amount' => 'required|numeric',
+                'sales_order_date' => 'required|date',
+            ]);
+
+            $order = CustomerOrder::where('orn_number', $validated['orn_number'])->first();
+
+            $order->update([
+                'sales_order_no' => $validated['sales_order_no'],
+                'sales_order_amount' => $validated['sales_order_amount'],
+                'sales_order_date' => $validated['sales_order_date'],
+                'status' => 4,
+            ]);
+
+            CustomerOrderDetails::create([
+                'customer_order_id' => $order->id,
+                'orn_number' => $order->orn_number,
+                'status' => 4,
+                'changed_by' => 1,
+                'created_at' => now(),
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Sales order updated successfully',
+                'order' => $order,
+                'success' => true
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'message' => 'Failed to update sales order: ' . $e->getMessage(),
+                'success' => false
+            ], 500);
+        }
+    }
+
+    public function updateQuotation(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $validated = $request->validate([
+                'orn_number' => 'required|string|exists:customer_orders,orn_number',
+                'quotation_no' => 'required|string',
+                'quotation_amount' => 'required|numeric',
+                'quotation_date' => 'required|date',
+            ]);
+
+            $order = CustomerOrder::where('orn_number', $validated['orn_number'])->first();
+
+            $order->update([
+                'quotation_no' => $validated['quotation_no'],
+                'quotation_amount' => $validated['quotation_amount'],
+                'quotation_date' => $validated['quotation_date'],
+                'status' => 5,
+            ]);
+
+            CustomerOrderDetails::create([
+                'customer_order_id' => $order->id,
+                'orn_number' => $order->orn_number,
+                'status' => 5,
+                'changed_by' => 1,
+                'created_at' => now(),
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Quotation updated successfully',
+                'order' => $order,
+                'success' => true
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'message' => 'Failed to update quotation: ' . $e->getMessage(),
+                'success' => false
+            ], 500);
+        }
+    }
 }
