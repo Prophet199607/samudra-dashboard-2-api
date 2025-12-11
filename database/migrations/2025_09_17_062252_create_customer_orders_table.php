@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('order_request_date');
             $table->text('remark')->nullable();
             $table->string('sales_branch')->nullable();
+            $table->string('sales_branch_code')->nullable();
             $table->string('payment_type')->nullable();
             $table->date('approval_date')->nullable();
             $table->text('approval_remark')->nullable();
