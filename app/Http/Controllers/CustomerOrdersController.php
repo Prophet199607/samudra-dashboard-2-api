@@ -159,7 +159,15 @@ class CustomerOrdersController extends Controller
                     ]);
                     break;
 
-                case 9: // Delivery Info
+                case 9: // Cash In Info
+                    $updateData = array_merge($updateData, [
+                        'cash_in_no' => $request->input('cash_in_no'),
+                        'cash_in_amount' => $request->input('cash_in_amount'),
+                        'cash_in_remark' => $request->input('cash_in_remark'),
+                    ]);
+                    break;
+
+                case 10: // Delivery Info
                     $updateData = array_merge($updateData, [
                         'delivery_type' => $request->input('delivery_type'),
                         'bus_no' => $request->input('bus_no'),
@@ -190,6 +198,10 @@ class CustomerOrdersController extends Controller
 
                         'invoice_no' => $request->input('invoice_no'),
                         'invoice_amount' => $request->input('invoice_amount'),
+                
+                        'cash_in_no' => $request->input('cash_in_no'),
+                        'cash_in_amount' => $request->input('cash_in_amount'),
+                        'cash_in_remark' => $request->input('cash_in_remark'),
 
                         'delivery_type' => $request->input('delivery_type'),
                         'is_delayed' => $request->input('is_delayed'),
@@ -297,7 +309,7 @@ class CustomerOrdersController extends Controller
 
     public function getDashboardStats()
     {
-        $completedOrders = CustomerOrder::where('status', 9)->count();
+        $completedOrders = CustomerOrder::where('status', 10)->count();
         $totalOrders = CustomerOrder::count();
         $pendingOrders = $totalOrders - $completedOrders;
 

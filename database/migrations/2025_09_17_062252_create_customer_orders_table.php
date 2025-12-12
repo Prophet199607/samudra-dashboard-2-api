@@ -37,6 +37,9 @@ return new class extends Migration
             $table->boolean('payment_confirmed')->default(0);
             $table->string('invoice_no')->nullable();
             $table->decimal('invoice_amount', 12, 2)->nullable();
+            $table->string('cash_in_no')->nullable();
+            $table->decimal('cash_in_amount', 12, 2)->nullable();
+            $table->text('cash_in_remark')->nullable();
             $table->string('delivery_type')->nullable();
             $table->boolean('is_delayed')->default(0);
             $table->text('delay_reason')->nullable();
