@@ -36,6 +36,7 @@ class CustomerOrdersController extends Controller
 
             // Make all fields optional except basic ones
             $validated = $request->validate([
+                'customer_code' => 'nullable|string',
                 'customer_name' => 'nullable|string',
                 'customer_group' => 'nullable|string',
                 'customer_branch' => 'nullable|string',
@@ -48,6 +49,7 @@ class CustomerOrdersController extends Controller
             ]);
 
             $order = CustomerOrder::create([
+                'customer_code' => $validated['customer_code'] ?? null,
                 'customer_name' => $validated['customer_name'] ?? null,
                 'customer_group' => $validated['customer_group'] ?? null,
                 'customer_branch' => $validated['customer_branch'] ?? null,
@@ -198,7 +200,7 @@ class CustomerOrdersController extends Controller
 
                         'invoice_no' => $request->input('invoice_no'),
                         'invoice_amount' => $request->input('invoice_amount'),
-                
+
                         'cash_in_no' => $request->input('cash_in_no'),
                         'cash_in_amount' => $request->input('cash_in_amount'),
                         'cash_in_remark' => $request->input('cash_in_remark'),
@@ -339,7 +341,7 @@ class CustomerOrdersController extends Controller
             'success' => true
         ], 200);
     }
-    
+
     public function updateSalesOrder(Request $request)
     {
         try {
