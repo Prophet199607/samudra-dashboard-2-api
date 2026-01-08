@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerOrdersController;
 use App\Http\Controllers\DataRepositoryController;
+use App\Http\Controllers\PreviousCollectionController;
 
 
 /*
@@ -40,6 +41,11 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/new', [CustomerOrdersController::class, 'createOrder']);
         Route::put('{ornNumber}', [CustomerOrdersController::class, 'updateOrder']);
         Route::put('{ornNumber}/delay', [CustomerOrdersController::class, 'updateDelay']);
+    });
+
+    // Previous Collections
+    Route::prefix('prv-collections')->group(function () {
+        Route::get('generate-pc', [PreviousCollectionController::class, 'generatePCNumber']);
     });
 });
 
