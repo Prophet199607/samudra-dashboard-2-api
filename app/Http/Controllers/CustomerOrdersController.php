@@ -314,7 +314,7 @@ class CustomerOrdersController extends Controller
     {
         $orders = CustomerOrder::with(['order_details' => function ($query) {
             $query->with('user')->orderBy('orn_number', 'desc');
-        }])->get();
+        }])->orderBy('id', 'desc')->get();
 
         return response()->json([
             'orders' => $orders,

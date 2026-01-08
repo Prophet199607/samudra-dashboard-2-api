@@ -227,7 +227,7 @@ class PreviousCollectionController extends Controller
 
     public function getAllCollections()
     {
-        $collections = PreviousCollection::get();
+        $collections = PreviousCollection::orderBy('id', 'desc')->get();
 
         $collectionIds = $collections->pluck('id');
         $details = PreviousCollectionDetail::with('user')
