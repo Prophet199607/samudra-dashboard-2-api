@@ -46,6 +46,10 @@ Route::middleware('auth:api')->group(function () {
     // Previous Collections
     Route::prefix('prv-collections')->group(function () {
         Route::get('generate-pc', [PreviousCollectionController::class, 'generatePCNumber']);
+        Route::get('/', [PreviousCollectionController::class, 'getAllCollections']);
+        Route::get('{pcNumber}', [PreviousCollectionController::class, 'getCollection']);
+        Route::post('/new', [PreviousCollectionController::class, 'createCollection']);
+        Route::put('{pcNumber}', [PreviousCollectionController::class, 'updateCollection']);
     });
 });
 
