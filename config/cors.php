@@ -20,6 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
+        'http://192.168.1.131:4545',
         'http://localhost:5173',
         'https://samudradist.onimtaitsl.com',
         'http://samudradist.onimtaitsl.com',
