@@ -24,6 +24,7 @@ return [
         'http://localhost:5173',
         'https://samudradist.onimtaitsl.com',
         'http://samudradist.onimtaitsl.com',
+        'http://samudrapos.onimtaitsl.com',
     ],
 
     'allowed_origins_patterns' => [],
