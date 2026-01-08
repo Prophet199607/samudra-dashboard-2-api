@@ -148,10 +148,33 @@ class CustomerOrdersController extends Controller
                     break;
 
                 case 7: // Payment Confirm
+                    $paymentConfirmed = $request->input('payment_confirmed');
                     $updateData = array_merge($updateData, [
-                        'payment_confirmed' => $request->input('payment_confirmed'),
+                        'payment_confirmed' => $paymentConfirmed,
                         'payment_remark' => $request->input('payment_remark'),
                     ]);
+
+                    if ($paymentConfirmed == 0) {
+                        $updateData['status'] = 5;
+
+                        if ($order->payment_receipt) {
+                            Storage::disk('public')->delete($order->payment_receipt);
+                        }
+                        $updateData['payment_receipt'] = null;
+
+                        CustomerOrderDetails::where('customer_order_id', $order->id)
+                            ->where('status', 6)
+                            ->delete();
+
+                        $order->update($updateData);
+                        DB::commit();
+
+                        return response()->json([
+                            'message' => 'Order updated successfully',
+                            'order' => $order->fresh(),
+                            'success' => true
+                        ], 200);
+                    }
                     break;
 
                 case 8: // Invoice Info
@@ -228,13 +251,15 @@ class CustomerOrdersController extends Controller
             $order->update($updateData);
 
             // Create new order detail record for the current step
-            CustomerOrderDetails::create([
-                'customer_order_id' => $order->id,
-                'orn_number' => $order->orn_number,
-                'status' => $currentStep,
-                'changed_by' => auth()->id(),
-                'created_at' => now()
-            ]);
+            if (isset($updateData['status'])) {
+                CustomerOrderDetails::create([
+                    'customer_order_id' => $order->id,
+                    'orn_number' => $order->orn_number,
+                    'status' => $currentStep,
+                    'changed_by' => auth()->id(),
+                    'created_at' => now()
+                ]);
+            }
 
             DB::commit();
 
