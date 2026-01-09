@@ -34,9 +34,13 @@ class AuthController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
+        // Load permissions
+        $permissions = $user->getAllPermissions()->pluck('name');
+
         return response()->json([
             'access_token' => $token,
-            'user'         => $user
+            'user'         => $user,
+            'permissions'  => $permissions
         ]);
     }
 
@@ -54,7 +58,12 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return response()->json(['user' => $user]);
+        $permissions = $user->getAllPermissions()->pluck('name');
+
+        return response()->json([
+            'user' => $user,
+            'permissions' => $permissions
+        ]);
     }
 
     public function dashboard()
