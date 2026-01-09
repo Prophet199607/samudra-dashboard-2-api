@@ -17,28 +17,28 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'username' => 'admin1',
+                'name' => 'admin1',
                 'password' => Hash::make('123'),
                 'location' => '01',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'username' => 'admin2',
+                'name' => 'admin2',
                 'password' => Hash::make('123'),
                 'location' => '01',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'username' => 'Keshara',
+                'name' => 'Keshara',
                 'password' => Hash::make('keshara'),
                 'location' => '02',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'username' => 'Nirmal',
+                'name' => 'Nirmal',
                 'password' => Hash::make('nirmal'),
                 'location' => '02',
                 'created_at' => now(),
