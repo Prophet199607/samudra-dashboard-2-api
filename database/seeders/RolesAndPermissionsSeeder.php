@@ -14,36 +14,65 @@ class RolesAndPermissionsSeeder extends Seeder
         // ====== CLEAR CACHE ======
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // ====== CREATE PERMISSIONS ======
-        Permission::firstOrCreate(['name' => 'view users']);
-        Permission::firstOrCreate(['name' => 'edit users']);
-        Permission::firstOrCreate(['name' => 'delete users']);
-        Permission::firstOrCreate(['name' => 'create orders']);
-        Permission::firstOrCreate(['name' => 'view orders']);
-        Permission::firstOrCreate(['name' => 'edit orders']);
-        Permission::firstOrCreate(['name' => 'delete orders']);
+        // ====== 1. DEFINE PERMISSIONS ======
+        $permissions = [
+            // User Management
+            'view users',
+            'edit users',
 
-        // ====== CREATE ROLES ======
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $managerRole = Role::firstOrCreate(['name' => 'manager']);
-        $staffRole = Role::firstOrCreate(['name' => 'staff']);
+            // Workflow Steps (10 Permissions for 10 Steps)
+            'create order',          // Step 1
+            'assign branch',         // Step 2
+            'approve order',         // Step 3
+            'sales order',           // Step 4
+            'quotation',             // Step 5
+            'deposit slip',          // Step 6
+            'payment confirmation',  // Step 7
+            'invoice',               // Step 8
+            'collection receipt',    // Step 9
+            'delivery',              // Step 10
+        ];
 
-        // ====== ASSIGN PERMISSIONS TO ROLES ======
-        $adminRole->givePermissionTo(Permission::all()); // Admin gets all permissions
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'api']);
+        }
 
-        $managerRole->givePermissionTo(['view users', 'view orders', 'create orders', 'edit orders']);
+        // ====== 2. CREATE ROLES ======
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
+        $managerRole = Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'api']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'api']);
 
-        $staffRole->givePermissionTo(['view orders', 'create orders']); // limited permissions
+        // ====== 3. ASSIGN PERMISSIONS TO ROLES ======
+        
+        // Admin gets all permissions (handled via Gate::before, but syncing here keeps DB clean)
+        $adminRole->syncPermissions(Permission::all());
 
-        // ====== CREATE DEFAULT ADMIN USER ======
-        $admin = User::firstOrCreate( // change this to your real admin email
+        // Manager gets everything except user management
+        $managerPermissions = Permission::where('name', '!=', 'edit users')->get();
+        $managerRole->syncPermissions($managerPermissions);
+
+        // User gets permissions for creating orders and basic steps (Adjust as needed)
+        // For now, giving them 'create order' and 'deposit slip' as examples, or all step permissions?
+        // Let's give them typical "Sales Rep" permissions: 
+        // Create Order, Sales Order, Quotation, Deposit Slip, Collection Receipt
+        $userPermissions = Permission::whereIn('name', [
+            'create order',
+            'sales order',
+            'quotation',
+            'deposit slip',
+            'collection receipt'
+        ])->get();
+        $userRole->syncPermissions($userPermissions);
+
+        // ====== 4. CREATE DEFAULT ADMIN USER ======
+        $admin = User::firstOrCreate(
+            ['name' => 'Super Admin'],
             [
-                'name' => 'Super Admin',
-                'password' => bcrypt('admin123'), // change password
+                'password' => bcrypt('admin123'),
                 'location' => '01',
             ]
         );
-
+        
         $admin->assignRole($adminRole);
 
         $this->command->info('Default roles, permissions, and admin user created.');
