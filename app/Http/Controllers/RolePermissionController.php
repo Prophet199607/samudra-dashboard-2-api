@@ -1,0 +1,200 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+class RolePermissionController extends Controller
+{
+    public function getRoles()
+    {
+        $roles = Role::where('guard_name', 'api')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $roles
+        ]);
+    }
+
+    public function createRole(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9_]+$/',
+                Rule::unique('roles')->where(function ($query) {
+                    return $query->where('guard_name', 'api');
+                }),
+            ],
+        ]);
+
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $role = Role::create([
+            'name' => strtolower($validated['name']),
+            'guard_name' => 'api'
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Role created successfully',
+            'data' => $role
+        ], 201);
+    }
+
+    public function deleteRole($id)
+    {
+        $role = Role::findOrFail($id);
+
+        if (strtolower($role->name) === 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'The admin role cannot be deleted.',
+            ], 403);
+        }
+
+        $role->delete();
+        
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Role deleted successfully'
+        ]);
+    }
+
+    public function updateRole(Request $request, $id)
+    {
+        $role = Role::findOrFail($id);
+
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9_]+$/',
+                Rule::unique('roles')->where(function ($query) {
+                    return $query->where('guard_name', 'api');
+                })->ignore($role->id),
+            ],
+        ]);
+
+        $newName = strtolower($request->name);
+
+        if (strtolower($role->name) === 'admin' && $newName !== 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'The admin role name cannot be changed.',
+            ], 403);
+        }
+
+        $role->name = $newName;
+        $role->save();
+
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role updated successfully',
+            'data' => $role,
+        ]);
+    }
+
+    public function getPermissions()
+    {
+        $permissions = Permission::where('guard_name', 'api')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $permissions
+        ]);
+    }
+
+    public function createPermission(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('permissions')->where(function ($query) {
+                    return $query->where('guard_name', 'api');
+                }),
+            ]
+        ]);
+
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $permission = Permission::create([
+            'name' => $validated['name'],
+            'guard_name' => 'api'
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Permission created successfully',
+            'data' => $permission
+        ], 201);
+    }
+
+    public function deletePermission($id)
+    {
+        $permission = Permission::findOrFail($id);
+        $permission->delete();
+        
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Permission deleted successfully'
+        ]);
+    }
+
+    public function updatePermission(Request $request, $id)
+    {
+        $permission = Permission::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('permissions')->ignore($permission->id)->where(function ($query) {
+                    return $query->where('guard_name', 'api');
+                }),
+            ]
+        ]);
+
+        $permission->name = $validated['name'];
+        $permission->save();
+
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permission updated successfully',
+            'data' => $permission
+        ]);
+    }
+
+    /**
+     * Get permissions for a specific role
+     */
+    public function getRolePermissions($roleId)
+    {
+        $role = Role::findOrFail($roleId);
+        $permissions = $role->permissions;
+
+        return response()->json([
+            'success' => true,
+            'data' => $permissions,
+        ]);
+    }
+}
