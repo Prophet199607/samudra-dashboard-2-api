@@ -197,4 +197,30 @@ class RolePermissionController extends Controller
             'data' => $permissions,
         ]);
     }
+    public function syncPermissionsToRole(Request $request, $roleId)
+    {
+        $role = Role::findOrFail($roleId);
+
+        $request->validate([
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,name', // Validate each permission exists
+        ]);
+
+        if (strtolower($role->name) === 'admin') {
+             // Optional: Decide if admin should be editable. 
+             // Usually admin has all permissions via Gate::before, 
+             // but explicit assignment doesn't hurt.
+        }
+
+        $role->syncPermissions($request->permissions);
+        
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permissions assigned successfully',
+            'data' => $role->load('permissions')
+        ]);
+    }
 }
