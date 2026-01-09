@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'username'   => 'required|string',
+            'name'   => 'required|string',
             'password'   => 'required|string',
             'location'   => 'required|string',
         ]);
@@ -26,7 +26,7 @@ class AuthController extends Controller
         //     return response()->json(['error' => 'Could not verify location. Please try again later.'], 500);
         // }
 
-        $user = User::where('username', $credentials['username'])->first();
+        $user = User::where('name', $credentials['name'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password) || $user->location !== $credentials['location']) {
             return response()->json(['error' => 'Invalid credentials'], 401);
