@@ -161,10 +161,10 @@ class PreviousCollectionController extends Controller
                     }
                     break;
 
-                case 8: // Invoice Info
+                case 8: // Receipt Info
                     $updateData = array_merge($updateData, [
-                        'invoice_no' => $request->input('invoice_no'),
-                        'invoice_amount' => $request->input('invoice_amount'),
+                        'receipt_no' => $request->input('receipt_no'),
+                        'receipt_amount' => $request->input('receipt_amount'),
                     ]);
                     break;
 
@@ -180,8 +180,8 @@ class PreviousCollectionController extends Controller
                         'payment_confirmed' => $request->input('payment_confirmed'),
                         'payment_remark' => $request->input('payment_remark'),
 
-                        'invoice_no' => $request->input('invoice_no'),
-                        'invoice_amount' => $request->input('invoice_amount'),
+                        'receipt_no' => $request->input('receipt_no'),
+                        'receipt_amount' => $request->input('receipt_amount'),
 
                         'cash_in_no' => $request->input('cash_in_no'),
                         'cash_in_amount' => $request->input('cash_in_amount'),
