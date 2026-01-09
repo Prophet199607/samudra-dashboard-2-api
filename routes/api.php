@@ -26,7 +26,7 @@ Route::middleware('auth:api')->group(function () {
     // ===============================
     // ADMIN / USER MANAGEMENT
     // ===============================
-    Route::middleware('permission:view users|edit users')->prefix('users')->group(function () {
+    Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index']);
         Route::post('/', [UserController::class, 'store']);
         Route::put('{id}', [UserController::class, 'update']);
@@ -36,7 +36,7 @@ Route::middleware('auth:api')->group(function () {
     // ===============================
     // ROLES & PERMISSIONS
     // ===============================
-    Route::prefix('roles')->middleware('permission:view users|edit users')->group(function () {
+    Route::prefix('roles')->group(function () {
         Route::get('/', [RolePermissionController::class, 'getRoles']);
         Route::post('/', [RolePermissionController::class, 'createRole']);
         Route::put('{id}', [RolePermissionController::class, 'updateRole']);
@@ -45,7 +45,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('{id}/permissions', [RolePermissionController::class, 'syncPermissionsToRole']);
     });
 
-    Route::prefix('permissions')->middleware('permission:view users|edit users')->group(function () {
+    Route::prefix('permissions')->group(function () {
         Route::get('/', [RolePermissionController::class, 'getPermissions']);
         Route::post('/', [RolePermissionController::class, 'createPermission']);
         Route::put('{id}', [RolePermissionController::class, 'updatePermission']);
@@ -55,7 +55,7 @@ Route::middleware('auth:api')->group(function () {
     // ===============================
     // DATA REPOSITORY
     // ===============================
-    Route::middleware('permission:create order|sales order')->group(function () {
+    Route::prefix('data-repository')->group(function () {
         Route::get('customers', [DataRepositoryController::class, 'getCustomers']);
         Route::get('customer-groups', [DataRepositoryController::class, 'getCustomerGroups']);
         Route::get('payment-types', [DataRepositoryController::class, 'getPaymentTypes']);
@@ -65,18 +65,16 @@ Route::middleware('auth:api')->group(function () {
     // CUSTOMER ORDERS
     // ===============================
     Route::prefix('orders')->group(function () {
-        Route::middleware('permission:create order|sales order')->group(function () {
             Route::get('generate-orn', [CustomerOrdersController::class, 'generateOrnNumber']);
             Route::get('dashboard-stats', [CustomerOrdersController::class, 'getDashboardStats']);
             Route::get('/', [CustomerOrdersController::class, 'getAllOrderDetails']);
             Route::get('{ornNumber}', [CustomerOrdersController::class, 'getOrder']);
-        });
 
-        Route::middleware('permission:create order')->group(function () {
             Route::post('new', [CustomerOrdersController::class, 'createOrder']);
-        });
 
-        Route::middleware('permission:create order|sales order|quotation|invoice|delivery')->group(function () {
+            // General update route - controller handles specific step updates, 
+            // but we allow users with step permissions to hit this.
+            Route::put('{ornNumber}', [CustomerOrdersController::class, 'updateOrder']);
              // General update route - controller handles specific step updates, 
              // but we allow users with step permissions to hit this.
             Route::put('{ornNumber}', [CustomerOrdersController::class, 'updateOrder']);
@@ -88,21 +86,19 @@ Route::middleware('auth:api')->group(function () {
     // PREVIOUS COLLECTIONS
     // ===============================
     Route::prefix('prv-collections')->group(function () {
-        Route::middleware('permission:collection receipt')->group(function () {
             Route::get('generate-pc', [PreviousCollectionController::class, 'generatePCNumber']);
             Route::get('/', [PreviousCollectionController::class, 'getAllCollections']);
             Route::get('{pcNumber}', [PreviousCollectionController::class, 'getCollection']);
             Route::post('new', [PreviousCollectionController::class, 'createCollection']);
             Route::put('{pcNumber}', [PreviousCollectionController::class, 'updateCollection']);
-        });
+        
     });
 
     // ===============================
     // TRANSACTIONS
     // ===============================
-    Route::prefix('transactions')->middleware('permission:approve order|sales order|quotation')->group(function () {
+    Route::prefix('transactions')->group(function () {
         Route::post('approved-orders', [CustomerOrdersController::class, 'getApprovedOrders']);
         Route::post('update-sales-order', [CustomerOrdersController::class, 'updateSalesOrder']);
         Route::post('update-quotation', [CustomerOrdersController::class, 'updateQuotation']);
     });
-});
