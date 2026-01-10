@@ -67,13 +67,14 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // ====== 2. CREATE ROLES ======
         $superAdminRole = Role::firstOrCreate(['name' => 'super admin', 'guard_name' => 'api']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
 
         // ====== 3. ASSIGN PERMISSIONS TO ROLES ======
         
         // Super admin gets all permissions (handled via Gate::before, but syncing here keeps DB clean)
         $superAdminRole->syncPermissions(Permission::all());
 
-        // ====== 4. CREATE DEFAULT ADMIN USER ======
+        // ====== 4. CREATE DEFAULT USERS ======
         $superAdmin = User::firstOrCreate(
             ['name' => 'Super Admin'],
             [
@@ -81,8 +82,16 @@ class RolesAndPermissionsSeeder extends Seeder
                 'location' => '01',
             ]
         );
+        $admin = User::firstOrCreate(
+            ['name' => 'Admin'],
+            [
+                'password' => bcrypt('admin123'),
+                'location' => '01',
+            ]
+        );
         
         $superAdmin->assignRole($superAdminRole);
+        $admin->assignRole($adminRole);
 
         $this->command->info('Default roles, permissions, and admin user created.');
     }
