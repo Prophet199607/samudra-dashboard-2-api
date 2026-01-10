@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Models\PermissionGroup;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class RolePermissionController extends Controller
 {
@@ -109,7 +110,7 @@ class RolePermissionController extends Controller
 
     public function getPermissions()
     {
-        $permissions = Permission::where('guard_name', 'api')->get();
+        $permissions = Permission::with('group')->where('guard_name', 'api')->get();
         return response()->json([
             'success' => true,
             'data' => $permissions
@@ -125,7 +126,8 @@ class RolePermissionController extends Controller
                 Rule::unique('permissions')->where(function ($query) {
                     return $query->where('guard_name', 'api');
                 }),
-            ]
+            ],
+            'permission_group_id' => 'required|exists:permission_groups,id'
         ]);
 
         // Clear permission cache
@@ -133,13 +135,40 @@ class RolePermissionController extends Controller
 
         $permission = Permission::create([
             'name' => $validated['name'],
-            'guard_name' => 'api'
+            'guard_name' => 'api',
+            'permission_group_id' => $validated['permission_group_id']
         ]);
         
         return response()->json([
             'success' => true,
             'message' => 'Permission created successfully',
             'data' => $permission
+        ], 201);
+    }
+
+    public function getPermissionGroups()
+    {
+        $groups = PermissionGroup::all();
+        return response()->json([
+            'success' => true,
+            'data' => $groups
+        ]);
+    }
+
+    public function createPermissionGroup(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|unique:permission_groups,name|max:255',
+        ]);
+
+        $group = PermissionGroup::create([
+            'name' => $validated['name']
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permission Group created successfully',
+            'data' => $group
         ], 201);
     }
 

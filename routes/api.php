@@ -52,6 +52,11 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('{id}', [RolePermissionController::class, 'deletePermission']);
     });
 
+    Route::prefix('permission-groups')->group(function () {
+        Route::get('/', [RolePermissionController::class, 'getPermissionGroups']);
+        Route::post('/', [RolePermissionController::class, 'createPermissionGroup']);
+    });
+
     // ===============================
     // DATA REPOSITORY
     // ===============================
