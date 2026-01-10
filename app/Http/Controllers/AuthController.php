@@ -34,12 +34,13 @@ class AuthController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        // Load permissions
+        // Load permissions and roles
         $permissions = $user->getAllPermissions()->pluck('name');
+        $roles = $user->getRoleNames();
 
         return response()->json([
             'access_token' => $token,
-            'user'         => $user,
+            'user'         => array_merge($user->toArray(), ['roles' => $roles]),
             'permissions'  => $permissions
         ]);
     }
@@ -59,9 +60,10 @@ class AuthController extends Controller
         }
 
         $permissions = $user->getAllPermissions()->pluck('name');
+        $roles = $user->getRoleNames();
 
         return response()->json([
-            'user' => $user,
+            'user' => array_merge($user->toArray(), ['roles' => $roles]),
             'permissions' => $permissions
         ]);
     }
