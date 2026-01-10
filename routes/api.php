@@ -55,6 +55,8 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('permission-groups')->group(function () {
         Route::get('/', [RolePermissionController::class, 'getPermissionGroups']);
         Route::post('/', [RolePermissionController::class, 'createPermissionGroup']);
+        Route::put('{id}', [RolePermissionController::class, 'updatePermissionGroup']);
+        Route::delete('{id}', [RolePermissionController::class, 'deletePermissionGroup']);
     });
 
     // ===============================

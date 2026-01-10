@@ -172,6 +172,41 @@ class RolePermissionController extends Controller
         ], 201);
     }
 
+    public function updatePermissionGroup(Request $request, $id)
+    {
+        $group = PermissionGroup::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:permission_groups,name,' . $group->id,
+        ]);
+
+        $group->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permission Group updated successfully',
+            'data' => $group
+        ]);
+    }
+
+    public function deletePermissionGroup($id)
+    {
+        $group = PermissionGroup::findOrFail($id);
+
+        if ($group->permissions()->count() > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete group that has permissions assigned to it.'
+            ], 422);
+        }
+
+        $group->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permission Group deleted successfully'
+        ]);
+    }
+
     public function deletePermission($id)
     {
         $permission = Permission::findOrFail($id);
