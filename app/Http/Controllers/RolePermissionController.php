@@ -197,10 +197,12 @@ class RolePermissionController extends Controller
                 Rule::unique('permissions')->ignore($permission->id)->where(function ($query) {
                     return $query->where('guard_name', 'api');
                 }),
-            ]
+            ],
+            'permission_group_id' => 'required|exists:permission_groups,id'
         ]);
 
         $permission->name = $validated['name'];
+        $permission->permission_group_id = $validated['permission_group_id'];
         $permission->save();
 
         // Clear permission cache
@@ -209,7 +211,7 @@ class RolePermissionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Permission updated successfully',
-            'data' => $permission
+            'data' => $permission->load('group')
         ]);
     }
 
