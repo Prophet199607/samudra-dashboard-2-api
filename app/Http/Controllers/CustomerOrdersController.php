@@ -126,6 +126,11 @@ class CustomerOrdersController extends Controller
                 'status' => $currentStep
             ];
 
+            // If updating step 3 and order is already past step 3, don't update status
+            if ($currentStep == 3 && $order->status > 3) {
+                unset($updateData['status']);
+            }
+
             // Add step-specific fields based on current step
             switch ($currentStep) {
                 case 2: // Assign Branch
